@@ -1,3 +1,5 @@
+const Product = require("../models/product");
+
 exports.getAddProduct = (req, res, next) => {
     res.render("add-product", {
         pageTitle: "Add Product",
@@ -8,8 +10,20 @@ exports.getAddProduct = (req, res, next) => {
     });
 };
 
-exports.addProduct = (req, res, next) => {
-    products.push({ title: req.body.title });
+exports.postAddProduct = (req, res, next) => {
+    const products = new Product(req.body.title);
+    products.save();
     res.redirect("/");
 };
-https://github.com/bayukembara/node-mvc.git
+
+exports.getAllProduct = (req, res, next) => {
+    const products = Product.fetchAll();
+    res.render("shop", {
+        prods: products,
+        pageTitle: "Shop",
+        path: "/",
+        hasProducts: products.length > 0,
+        activeShop: true,
+        productCSS: true,
+    });
+};
